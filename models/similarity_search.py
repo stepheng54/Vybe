@@ -1,30 +1,22 @@
-"""
-similarity_search.py
---------------------
-Builds and queries a similarity index for songs based on extracted audio features.
-Uses FAISS for efficient nearest-neighbor search.
-"""
-
 import numpy as np
 import faiss
 import os
 
 class SimilaritySearch:
-
-    # Initializes a FAISS index for L2 (Euclidean) distance.
+    # Initializes a FAISS index for L2 (Euclidean) distance
     def __init__(self, feature_dim: int):
         self.feature_dim = feature_dim
         self.index = faiss.IndexFlatL2(feature_dim)
-        self.song_ids = []  # keep track of filenames or IDs
+        self.song_ids = [] 
 
-    # Adds a new song feature vector to the index.
+    # Adds a new song feature vector to the index
     def add_song(self, song_id: str, feature_vector: np.ndarray):
         if feature_vector.ndim == 1:
             feature_vector = feature_vector.reshape(1, -1)
         self.index.add(feature_vector.astype("float32"))
         self.song_ids.append(song_id)
 
-    # Searches for the k most similar songs to the given feature vector.
+    # Searches for the k most similar songs to the given feature vector
     def search(self, query_vector: np.ndarray, k: int = 5):
         if query_vector.ndim == 1:
             query_vector = query_vector.reshape(1, -1)
