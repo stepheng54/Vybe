@@ -2,7 +2,7 @@ import os
 import re
 import pandas as pd
 
-RAW_DIR = "data/raw/fma_small" 
+RAW_DIR = "data/raw" 
 TRACKS_CSV = "data/external/tracks.csv"
 LIB_OUT = "data/processed/library.csv"
 
@@ -45,9 +45,10 @@ def scan_files() -> pd.DataFrame:
         if not f.lower().endswith(".mp3"):
             continue
         m = re.match(r"(\d{6})\.mp3$", f)
-        if not m:
-            continue
-        tid = int(m.group(1))
+        if m:
+            tid = int(m.group(1))
+        else:
+            tid = pd.NA
         rel = os.path.join(root, f).replace("\\", "/")
         rows.append({"track_id": tid, "filename": f, "rel_path": rel})
  return pd.DataFrame(rows)
@@ -60,6 +61,9 @@ def main():
  if files.empty:
     print(f"No MP3 files found under {RAW_DIR}")
     return
+
+ files['track_id'] = files['track_id'].astype("Int64")
+ tracks['track_id'] = tracks['track_id'].astype("Int64")
 
  lib = files.merge(tracks, on="track_id", how="left")
 
