@@ -1,3 +1,12 @@
+"""
+This file contains my original approach to preparing the fma_small dataset for similarity search.
+It extracts features from audio files, handles corrupted files by moving them to a separate directory,
+and builds a FAISS index for efficient similarity search.
+
+This approach was extremely slow and has been replaced by taking advantage of pre-extracted features 
+provided in the features.csv file included with the fma_small dataset.
+"""
+
 import os
 import shutil
 import numpy as np
@@ -31,7 +40,7 @@ def main():
     os.makedirs(os.path.dirname(INDEX_FILE), exist_ok=True)
     os.makedirs(BROKEN_DIR, exist_ok=True)
 
-    print(f"Checking {RAW_DIR} for new audio files...")
+    print(f"Checking {RAW_DIR} for new audio files")
     songs = []
     for root, _, files in os.walk(RAW_DIR):
         for f in files:
@@ -39,12 +48,11 @@ def main():
                 songs.append(os.path.join(root, f))
 
     if not songs:
-        print("No audio files found in data/raw/. Add songs first.")
+        print("No audio files found in data/raw/")
         return
 
     metadata = []
 
-    # Temporary placeholder; will update later with actual feature length
     search_model = SimilaritySearch(feature_dim=51)
 
     for song_path in tqdm(songs, desc="Extracting features"):
@@ -59,21 +67,21 @@ def main():
             try:
                 vec = np.load(feature_path)
             except Exception as e:
-                print(f"[ERROR] Corrupted feature file {feature_path}: {e}")
+                print(f"Corrupted feature file {feature_path}: {e}")
                 os.remove(feature_path)
                 continue
         else:
             try:
                 vec = extract_features(song_path)
             except Exception as e:
-                print(f"[ERROR] Failed to process {song_path}: {e}")
+                print(f"Failed to process {song_path}: {e}")
                 safe_move_to_broken(song_path)
                 continue
 
             if vec.size > 0:
                 np.save(feature_path, vec)
             else:
-                print(f"[WARN] Empty features — skipping {file_name}")
+                print(f"Empty features, skipping {file_name}")
                 safe_move_to_broken(song_path)
                 continue
 
