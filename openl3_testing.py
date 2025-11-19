@@ -1,3 +1,11 @@
+"""
+This entire file was produced by ChatGPT as part of an attempt to explore an alternative method of 
+defining audio similarity using OpenL3 embeddings. It was a proof of concept that I used on two 
+cherry-picked songs to see how well OpenL3 embeddings captured similarity compared to my existing 
+method based on MFCC + Chroma features. It performed much better to what I was expecting, so I may
+eventually integrate OpenL3 into the main codebase.
+"""
+
 import numpy as np
 import librosa
 import openl3
