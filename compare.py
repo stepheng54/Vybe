@@ -1,4 +1,13 @@
+"""
+This file was created to confirm that the new feature extraction
+actually produces different vectors compared to the old version.
+I made this because my manual tests were showing the exact same results
+but that was because I was accidentally still using the old feature extraction code.
+
+"""
+
 import numpy as np, os
+import random
 
 old_dir = "data/processed_old"
 new_dir = "data/processed"
@@ -17,9 +26,7 @@ if len(old_vec) == len(new_vec):
     diff = np.mean(np.abs(old_vec - new_vec))
     print("Mean absolute difference:", diff)
 else:
-    print("Different dimensions — definitely rebuilt!")
-
-import random
+    print("Different dimensions, new features are included")
 
 samples = random.sample([f for f in os.listdir(new_dir) if f.endswith(".npy")], 5)
 for file in samples:
@@ -28,7 +35,7 @@ for file in samples:
     new_vec = np.load(os.path.join(new_dir, file))
     if len(old_vec) == len(new_vec):
         diff = np.mean(np.abs(old_vec - new_vec))
-        print(f"{file}: Δmean={diff:.4f}")
+        print(f"{file}: change in mean={diff:.4f}")
     else:
         print(f"{file}: shape changed ({len(old_vec)}→{len(new_vec)})")
 

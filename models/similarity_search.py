@@ -44,20 +44,23 @@ class SimilaritySearch:
 
 
 if __name__ == "__main__":
-    # Example usage (test run)
     from features.extract_features import extract_features
 
-    # 
-    songs = []
+    songs = ["C:\\Users\\sgilt\\OneDrive\\Desktop\\Vybe\\data\\raw\\Personal\\South Arcade - FEAR OF HEIGHTS.mp3",
+             "C:\\Users\\sgilt\\OneDrive\\Desktop\\Vybe\\data\\raw\\fma_small\\000\\000190.mp3",
+             "C:\\Users\\sgilt\\OneDrive\\Desktop\\Vybe\\data\\raw\\fma_small\\000\\000193.mp3",
+             "C:\\Users\\sgilt\\OneDrive\\Desktop\\Vybe\\data\\raw\\fma_small\\039\\039660.mp3",
+             "C:\\Users\\sgilt\\OneDrive\\Desktop\\Vybe\\data\\raw\\fma_small\\127\\127295.mp3",
+             "C:\\Users\\sgilt\\OneDrive\\Desktop\\Vybe\\data\\raw\\fma_small\\147\\147815.mp3"]
 
-    model = SimilaritySearch(feature_dim=51)
+    model = SimilaritySearch(feature_dim=64)
 
     for song in songs:
         vec = extract_features(song)
         if vec.size > 0:
             model.add_song(song, vec)
 
-    query = extract_features("../data/raw/song1.mp3")
+    query = extract_features("C:\\Users\\sgilt\\OneDrive\\Desktop\\Vybe\\South Arcade - 2005.mp3")
     results = model.search(query, k=3)
     print("\nSimilar Songs:")
     for song_id, dist in results:

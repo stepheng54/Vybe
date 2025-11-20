@@ -17,7 +17,7 @@ LIBRARY_FILE = os.path.join(PROCESSED_DIR, "library.csv")
 CLIP_DURATION = 30.0  # seconds for the smart clip
 TEMP_CLIP_PATH = "temp_query_clip.wav"
 
-
+# find song name and track id based on filename
 def lookup_track_by_filename(filename: str, lib: pd.DataFrame):
     row = lib.loc[lib["filename"] == filename]
     if row.empty:
@@ -30,6 +30,8 @@ def lookup_track_by_filename(filename: str, lib: pd.DataFrame):
 
 CHERRY_FILENAME = "South Arcade - FEAR OF HEIGHTS.mp3"
 
+# for testing: get the vector for a known cherry-picked track
+# to verify that certain songs are found as similar or not
 def get_cherry_vector_by_filename(index, mapping: pd.DataFrame, lib: pd.DataFrame):
     # Find mapping row for the filename
     row_map = mapping.loc[mapping["filename"] == CHERRY_FILENAME]
@@ -51,7 +53,8 @@ def get_cherry_vector_by_filename(index, mapping: pd.DataFrame, lib: pd.DataFram
     return cherry_vec, display
 
 
-
+# find the most energetic segment in the song, which is the part 
+# of the song that has the most stuff going on
 def select_smart_clip(query_path: str, duration: float = CLIP_DURATION) -> str:
     y, sr = librosa.load(query_path, sr=None, mono=True)
 
@@ -74,7 +77,7 @@ def select_smart_clip(query_path: str, duration: float = CLIP_DURATION) -> str:
     frames = np.arange(len(rms))
     times = librosa.frames_to_time(frames, sr=sr, hop_length=hop_length)
 
-    # Number of RMS frames that roughly span the desired duration
+    # Number of RMS frames that span the desired duration
     window_frames = int((duration * sr) / hop_length)
     if window_frames <= 0 or window_frames > len(rms):
         # Song is short so just take from middle
@@ -104,7 +107,7 @@ def main():
         query_path = input("Enter path to audio file (mp3/wav/flac): ").strip()
 
     if not os.path.exists(query_path):
-        print(f"[ERROR] File not found: {query_path}")
+        print(f"File not found: {query_path}")
         return
 
     index = faiss.read_index(INDEX_FILE)

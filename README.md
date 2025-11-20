@@ -1,2 +1,2 @@
 # Vybe
-A music similarity engine that finds songs with comparable tempo, timbre, and harmony, allowing users to customize what ‘similar’ means.
+A music similarity model that finds songs that sound perceptually similar.

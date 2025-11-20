@@ -47,12 +47,16 @@ def extract_features(file_path: str) -> np.ndarray:
         return feature_vector
 
     except Exception as e:
-        print(f"[ERROR] Failed to process {file_path}: {e}")
+        print(f"Failed to process {file_path}: {e}")
         return np.array([])
 
 
 if __name__ == "__main__":
     # Test the feature extraction
-    sample_file = "data/raw/fma_small/000/000002.mp3"
+    sample_file = "C:\\Users\\sgilt\\OneDrive\\Desktop\\Vybe\\data\\raw\\fma_small\\000\\000193.mp3"
     features = extract_features(sample_file)
     print(f"Extracted feature vector shape: {features.shape}")
+    if features.size == 64:
+        print("Feature extraction successful and vector has expected length of 64.")
+    else:
+        print("Feature extraction failed or vector has unexpected length.")
