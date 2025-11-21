@@ -14,12 +14,7 @@ MAPPING_FILE = os.path.join(PROCESSED_DIR, "index_mapping.csv")
 def main():
     os.makedirs(os.path.dirname(INDEX_FILE), exist_ok=True)
 
-    if not os.path.exists(META_FILE):
-        raise FileNotFoundError(f"metadata.csv not found at {META_FILE}")
-
     meta = pd.read_csv(META_FILE)
-    if "feature_path" not in meta.columns:
-        raise ValueError("metadata.csv must have a 'feature_path' column")
 
     vectors = []
     kept_rows = []

@@ -7,9 +7,6 @@ TRACKS_CSV = "data/external/tracks.csv"
 LIB_OUT = "data/processed/library.csv"
 
 def load_tracks() -> pd.DataFrame:
-    if not os.path.exists(TRACKS_CSV):
-        raise FileNotFoundError(f"tracks.csv not found at: {os.path.abspath(TRACKS_CSV)}")
-
     # tracks.csv has a 2-row header (album / comments etc.)
     df = pd.read_csv(TRACKS_CSV, header=[0, 1], index_col=0)
 

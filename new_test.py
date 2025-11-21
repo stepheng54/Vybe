@@ -61,7 +61,6 @@ def select_smart_clip(query_path: str, duration: float = CLIP_DURATION) -> str:
     total_len_sec = len(y) / sr
     if total_len_sec <= duration:
         # Song is short so just use the whole thing
-        print(f"File shorter than {duration:.1f}s; using entire audio.")
         sf.write(TEMP_CLIP_PATH, y, sr)
         return TEMP_CLIP_PATH
 
@@ -91,8 +90,6 @@ def select_smart_clip(query_path: str, duration: float = CLIP_DURATION) -> str:
         # Safety clamp so we don't overshoot the end
         if offset + duration > total_len_sec:
             offset = max(0.0, total_len_sec - duration)
-
-    print(f"Selected {duration:.1f}s clip starting at {offset:.2f}s (highest energy region).")
 
     # Extract that segment and write it to temp WAV
     y_clip, _ = librosa.load(query_path, sr=sr, mono=True, offset=offset, duration=duration)
@@ -139,7 +136,7 @@ def main():
     k = 11
     D, I = index.search(q_vec, k)
 
-    print("\nTop similar tracks in your library:")
+    print("\nTop similar songs in your library:")
 
     shown = 0
     for idx, score in zip(I[0], D[0]):
@@ -149,7 +146,7 @@ def main():
         hit = hit.iloc[0]
         fname = hit["filename"]
         tid, disp = lookup_track_by_filename(fname, lib)
-        print(f"{shown+1}. ID {tid if tid is not None else '??'} | {disp}  (cosine: {score:.3f})")
+        print(f"{shown+1}. ID {tid if tid is not None else 'Not found'} | {disp}  (similarity: {score:.3f})")
         shown += 1
         if shown >= 5:
             break
