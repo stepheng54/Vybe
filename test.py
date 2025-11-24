@@ -42,7 +42,7 @@ results = model.search(query_vec, k=5)
 
 print("\nTop similar songs:")
 for i, (song, dist) in enumerate(results, start=1):
-    print(f"{i}. {song} (distance: {dist:.4f})")
+    print(f"{i}. {song} (similarity: {dist:.4f})")
 
 # Don't need to store the clip permanently
 if os.path.exists(clip_path):

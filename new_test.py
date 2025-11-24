@@ -157,4 +157,24 @@ def main():
 
 
 if __name__ == "__main__":
+    # tests looking up track by filename
+    lib = pd.DataFrame(
+        [{
+            "filename": "song.mp3",
+            "track_id": 123456,
+            "display": "Song — Artist",
+        }]
+    )
+
+    tid, disp = lookup_track_by_filename("song.mp3", lib)
+    assert tid == 123456
+    assert disp == "Song — Artist"
+
+    # unknown file: returns (None, filename)
+    tid2, disp2 = lookup_track_by_filename("fake.mp3", lib)
+    assert tid2 is None
+    assert disp2 == "fake.mp3"
+
+    print("All tests passed.\n")
+
     main()

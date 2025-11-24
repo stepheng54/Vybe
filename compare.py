@@ -8,6 +8,7 @@ but that was because I was accidentally still using the old feature extraction c
 
 import numpy as np, os
 import random
+import faiss
 
 old_dir = "data/processed_old"
 new_dir = "data/processed"
@@ -38,8 +39,6 @@ for file in samples:
         print(f"{file}: change in mean={diff:.4f}")
     else:
         print(f"{file}: shape changed ({len(old_vec)}→{len(new_vec)})")
-
-import faiss
 
 index = faiss.read_index("models/faiss_index.bin")
 print("Number of vectors:", index.ntotal)

@@ -101,14 +101,30 @@ def main():
 
     # Save metadata
     pd.DataFrame(metadata).to_csv(META_FILE, index=False)
-    print(f"\n Saved metadata to {META_FILE}")
 
     # Save FAISS index
     search_model.save(INDEX_FILE)
-    print(f"Saved FAISS index to {INDEX_FILE}")
 
     print("\n Dataset complete and ready for use.")
 
 
 if __name__ == "__main__":
+    # tests
+    all_extensions = ["song.mp3", "track.wav", "audio.flac"]
+
+    for name in all_extensions:
+        changed = (name
+                   .replace(".mp3", ".npy")
+                   .replace(".wav", ".npy")
+                   .replace(".flac", ".npy"))
+        assert changed.endswith(".npy"), f"Could not change {name} to .npy"
+        assert not changed.endswith((".mp3", ".wav", ".flac")), f"Extension not changed for {name}"
+    
+    dummy_src = os.path.join(RAW_DIR, "artist", "album", "track.mp3")
+    rel = os.path.relpath(dummy_src, RAW_DIR)
+    dest = os.path.join(BROKEN_DIR, rel)
+    assert dest.endswith(os.path.join("artist", "album", "track.mp3"))
+        
+    print("All tests passed.\n")
+
     main()

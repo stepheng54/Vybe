@@ -53,8 +53,8 @@ def main():
 
     faiss.write_index(index, INDEX_FILE)
     joblib.dump(scaler, SCALER_FILE)
-    print(f"Saved index → {INDEX_FILE}")
-    print(f"Saved scaler → {SCALER_FILE}")
+    print(f"Saved index: {INDEX_FILE}")
+    print(f"Saved scaler: {SCALER_FILE}")
 
     # Save mapping from FAISS index position to filename / feature_path
     meta_new["index_pos"] = meta_new.index
@@ -62,8 +62,21 @@ def main():
     meta_new[["index_pos", "filename", "feature_path"]].to_csv(
         MAPPING_FILE, index=False
     )
-    print(f"Saved index mapping → {MAPPING_FILE}")
+    print(f"Saved index mapping: {MAPPING_FILE}")
 
 
 if __name__ == "__main__":
+    # tests index mapping logic
+    meta_new = pd.DataFrame({
+        "filename": ["a.mp3", "b.mp3"],
+        "feature_path": ["a.npy", "b.npy"],
+    }).reset_index(drop=True)
+
+    meta_new["index_pos"] = meta_new.index
+
+    assert list(meta_new["index_pos"]) == [0, 1]
+    assert list(meta_new.columns) == ["filename", "feature_path", "index_pos"]
+
+    print("All tests passed.\n")
+
     main()
