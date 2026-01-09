@@ -2,9 +2,6 @@
 This file contains my original approach to preparing the fma_small dataset for similarity search.
 It extracts features from audio files, handles corrupted files by moving them to a separate directory,
 and builds a FAISS index for efficient similarity search.
-
-This approach was extremely slow and has been replaced by taking advantage of pre-extracted features 
-provided in the features.csv file included with the fma_small dataset.
 """
 
 import os
