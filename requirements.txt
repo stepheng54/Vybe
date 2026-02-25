@@ -2,6 +2,7 @@ librosa
 numpy
 pandas
 faiss-cpu
-streamlit
 scikit-learn
 matplotlib
+streamlit>=1.23.0
+altair>=5
